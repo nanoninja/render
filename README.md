@@ -6,7 +6,7 @@ A flexible Go package for rendering content in different formats with configurab
 [![Tests](https://github.com/nanoninja/render/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/nanoninja/render/actions/workflows/test.yaml)
 [![codecov](https://codecov.io/gh/nanoninja/render/branch/main/graph/badge.svg)](https://codecov.io/gh/nanoninja/render)
 [![Go Report Card](https://goreportcard.com/badge/github.com/nanoninja/render)](https://goreportcard.com/report/github.com/nanoninja/render)
-[![GoDoc](https://godoc.org/github.com/nanoninja/render?status.svg)](https://godoc.org/github.com/nanoninja/render)
+[![Go Reference](https://pkg.go.dev/badge/github.com/nanoninja/render.svg)](https://pkg.go.dev/github.com/nanoninja/render)
 [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
 ## Features
