@@ -1,0 +1,12 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+## [0.1.0] - 2026-04-25
+
+### Added
+- Core rendering engine supporting JSON, XML, HTML, Text, CSV, and Binary.
+- Functional options for custom rendering configurations.
+- High-performance optimizations (reduced heap allocations).
+- Global MIME type registry.
+- Initial documentation and examples.
