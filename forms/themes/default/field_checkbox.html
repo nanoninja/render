@@ -1,1 +1,1 @@
-{{define "field_checkbox"}}<input type="checkbox" name="{{.Name}}" id="{{.Name}}" value="1"{{if .Value}} checked{{end}}{{if .Required}} required{{end}}{{if .Errors}} aria-invalid="true" aria-describedby="{{.Name}}-errors"{{end}}{{range $k, $v := .Attrs}} {{$k}}="{{$v}}"{{end}}>{{end}}
+{{define "field_checkbox"}}<input type="checkbox" name="{{.Name}}" id="{{.Name}}" value="1"{{if .Value}} checked{{end}}{{if .Required}} required{{end}}{{if .Errors}} aria-invalid="true" aria-describedby="{{.Name}}-errors"{{end}}{{.RenderAttrs}}>{{end}}

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Registration complete</title>
+    <link rel="stylesheet" href="/wizard/static/style.css">
+</head>
+
+<body>
+    <div class="card">
+        <p class="step">All done 🎉</p>
+        <h1>Thanks, {{ .Name }}!</h1>
+        <p>Your registration is confirmed. A confirmation email will be sent to {{ .Email }}.</p>
+
+        <dl class="summary">
+            <dt>Interests</dt>
+            <dd>{{ if .Interests }}{{ range $i, $label := .Interests }}{{ if $i }}, {{ end }}{{ $label }}{{ end }}{{ else }}none{{ end }}</dd>
+            {{ with .Comment }}
+            <dt>Comment</dt>
+            <dd>{{ . }}</dd>
+            {{ end }}
+        </dl>
+    </div>
+</body>
+
+</html>

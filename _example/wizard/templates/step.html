@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Event registration — step {{ .Step }}</title>
+    <link rel="stylesheet" href="/wizard/static/style.css">
+</head>
+
+<body>
+    <div class="card">
+        <div class="progress-track">
+            <div class="progress-fill" style="width: {{ .Progress }}%"></div>
+        </div>
+        <p class="step">Step {{ .Step }} of {{ .Total }}</p>
+        {{ form .Form }}
+    </div>
+</body>
+
+</html>

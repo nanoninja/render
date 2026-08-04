@@ -5,8 +5,10 @@
 package forms
 
 import (
+	"html/template"
 	"maps"
 	"slices"
+	"strings"
 )
 
 // FieldType identifies the kind of HTML widget a Field renders as.
@@ -201,4 +203,45 @@ func withOverrides(f *Field, pairs ...string) *Field {
 		clone.Attrs[pairs[i]] = pairs[i+1]
 	}
 	return &clone
+}
+
+// RenderAttrs returns Attrs rendered as a single, pre-escaped HTML
+// attribute list (e.g. ` data-test="hello" aria-label="Close"`),
+// skipping any key named in except (used by themes that merge
+// "class" separately). Keys are sorted for deterministic output.
+//
+// This exists because html/template cannot safely escape a
+// template action used as a dynamic attribute *name* — a theme
+// template ranging over Attrs directly (`{{$k}}="{{$v}}"`) makes
+// html/template poison the value with "ZgotmplZ" instead of
+// rendering it, since it can't verify the escaping rules for an
+// unknown attribute name at parse time. Doing the escaping here in
+// Go instead sidesteps that: RenderAttrs only ever reads from
+// Attrs, which stays server-controlled by design (see
+// withOverrides and Form.Fill's doc comments), so there is no
+// attacker-controlled attribute name to guard against in the first
+// place — this is purely a template-engine limitation to work
+// around, not an added security boundary.
+func (f *Field) RenderAttrs(except ...string) template.HTMLAttr {
+	if len(f.Attrs) == 0 {
+		return ""
+	}
+	keys := make([]string, 0, len(f.Attrs))
+	for k := range f.Attrs {
+		if slices.Contains(except, k) {
+			continue
+		}
+		keys = append(keys, k)
+	}
+	slices.Sort(keys)
+
+	var b strings.Builder
+	for _, k := range keys {
+		b.WriteByte(' ')
+		b.WriteString(template.HTMLEscapeString(k))
+		b.WriteString(`="`)
+		b.WriteString(template.HTMLEscapeString(f.Attrs[k]))
+		b.WriteString(`"`)
+	}
+	return template.HTMLAttr(b.String())
 }

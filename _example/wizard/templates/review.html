@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Event registration — review</title>
+    <link rel="stylesheet" href="/wizard/static/style.css">
+</head>
+
+<body>
+    <div class="card">
+        <div class="progress-track">
+            <div class="progress-fill" style="width: {{ .Progress }}%"></div>
+        </div>
+        <p class="step">Step {{ .Step }} of {{ .Total }}</p>
+        <h1>Review your registration</h1>
+
+        <dl class="summary">
+            <dt>Name</dt>
+            <dd>{{ .Name }}</dd>
+            <dt>Email</dt>
+            <dd>{{ .Email }}</dd>
+            <dt>Interests</dt>
+            <dd>{{ if .Interests }}{{ range $i, $label := .Interests }}{{ if $i }}, {{ end }}{{ $label }}{{ end }}{{ else }}none{{ end }}</dd>
+            {{ with .Comment }}
+            <dt>Comment</dt>
+            <dd>{{ . }}</dd>
+            {{ end }}
+        </dl>
+
+        {{ form .Form }}
+    </div>
+</body>
+
+</html>

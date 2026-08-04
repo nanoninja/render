@@ -5,9 +5,13 @@
 package forms
 
 import (
+	"html/template"
+	"strings"
 	"testing"
 
 	"github.com/nanoninja/assert"
+
+	"github.com/nanoninja/render"
 )
 
 func TestFieldType(t *testing.T) {
@@ -250,6 +254,44 @@ func TestField_IsGroup(t *testing.T) {
 			assert.Equal(t, c.want, c.f.IsGroup())
 		})
 	}
+}
+
+func TestField_RenderAttrs(t *testing.T) {
+	t.Run("EmptyWhenNoAttrs", func(t *testing.T) {
+		f := Text("username")
+		assert.Equal(t, template.HTMLAttr(""), f.RenderAttrs())
+	})
+
+	t.Run("RendersASingleAttribute", func(t *testing.T) {
+		f := Text("username").WithAttr("data-test", "hello")
+		assert.Equal(t, template.HTMLAttr(` data-test="hello"`), f.RenderAttrs())
+	})
+
+	t.Run("SortsKeysForDeterministicOutput", func(t *testing.T) {
+		f := Text("username").WithAttr("zebra", "1").WithAttr("alpha", "2")
+		assert.Equal(t, template.HTMLAttr(` alpha="2" zebra="1"`), f.RenderAttrs())
+	})
+
+	t.Run("SkipsKeysNamedInExcept", func(t *testing.T) {
+		f := Text("username").WithAttr("class", "form-control").WithAttr("data-test", "1")
+		assert.Equal(t, template.HTMLAttr(` data-test="1"`), f.RenderAttrs("class"))
+	})
+
+	t.Run("EscapesKeyAndValue", func(t *testing.T) {
+		f := Text("username").WithAttr(`x"y`, `a"b`)
+		assert.Equal(t, template.HTMLAttr(` x&#34;y="a&#34;b"`), f.RenderAttrs())
+	})
+
+	t.Run("NeverProducesZgotmplZWhenRenderedInATemplate", func(t *testing.T) {
+		r := NewRenderer("default", ThemeDefault())
+		f := Text("username").WithAttr("formaction", "/elsewhere")
+
+		html, err := r.Field(f, render.NoOptions)
+
+		assert.NoError(t, err)
+		assert.False(t, strings.Contains(string(html), "ZgotmplZ"))
+		assert.StringContains(t, string(html), `formaction="/elsewhere"`)
+	})
 }
 
 func TestWithOverrides(t *testing.T) {

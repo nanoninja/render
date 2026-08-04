@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0] - 2026-08-04
+
+### Fixed
+- **`Field.Attrs` custom attributes never actually rendered.** Every theme templated custom attributes with `{{range $k, $v := .Attrs}} {{$k}}="{{$v}}"{{end}}` — a dynamic attribute *name* inside `html/template`, which the escaper can't verify is safe and silently replaces with `ZgotmplZ` instead of the real value. `WithAttr`/`WithClass`-set attributes beyond the themes' own hard-coded ones (`class` on `bootstrap5`) never worked in rendered output, only in the Go-side `Field.Attrs` map, and no test caught it since none checked actual rendered HTML for a custom attribute. Fixed by `Field.RenderAttrs(except ...string)`, which escapes and renders `Attrs` in Go and hands the theme an already-safe `template.HTMLAttr`; also fixes non-deterministic attribute ordering (map iteration order) by sorting keys.
+
+### Added
+- `_example/wizard`: a runnable `net/http` example — a 3-step, session-less registration wizard (each step its own page, prior answers carried forward as Hidden fields), using the dependency-free `default` theme and demonstrating `CheckboxGroup`, `Textarea`, and `Hidden` in a real flow for the first time. Its "Previous" buttons also exercise the fix above, via the HTML5 `formaction` attribute.
+
 ## [0.3.0] - 2026-08-04
 
 ### Added
