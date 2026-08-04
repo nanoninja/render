@@ -116,6 +116,13 @@ func TestBuilders(t *testing.T) {
 		assert.Equal(t, "fr", f.Options[0].Value)
 	})
 
+	t.Run("Radio", func(t *testing.T) {
+		opts := []Option{{Value: "yes", Label: "Yes"}, {Value: "no", Label: "No"}}
+		f := Radio("newsletter_opt_in", opts...)
+		assert.Equal(t, RadioType, f.Type)
+		assert.Equal(t, 2, len(f.Options))
+	})
+
 	t.Run("Checkbox", func(t *testing.T) {
 		f := Checkbox("newsletter")
 		assert.Equal(t, CheckboxType, f.Type)
@@ -233,16 +240,13 @@ func TestField_IsGroup(t *testing.T) {
 		f    *Field
 		want bool
 	}{
-		{"Radio", Select("plan", Option{Value: "free", Label: "Free"}), true},
+		{"Radio", Radio("plan", Option{Value: "free", Label: "Free"}), true},
 		{"CheckboxGroup", CheckboxGroup("interests", Option{Value: "go", Label: "Go"}), true},
 		{"Text", Text("username"), false},
 		{"Checkbox", Checkbox("newsletter"), false},
 	}
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			if c.name == "Radio" {
-				c.f.Type = RadioType
-			}
 			assert.Equal(t, c.want, c.f.IsGroup())
 		})
 	}

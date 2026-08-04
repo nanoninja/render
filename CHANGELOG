@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2026-08-04
+
+### Added
+- `forms.Radio(name, options...)`: a dedicated constructor for radio button group fields (previously only reachable by setting `Field.Type` manually).
+- `_example/quiz`: a runnable `net/http` example — a 5-question quiz on one page (Radio fields), scored and redisplayed on the same page after submit.
+
 ## [0.2.0] - 2026-08-04
 
 ### Added

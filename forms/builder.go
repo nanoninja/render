@@ -74,6 +74,13 @@ func Select(name string, options ...Option) *Field {
 	return &Field{Name: name, Type: SelectType, Options: options}
 }
 
+// Radio creates a radio button group field — a single choice among
+// options, rendered as one radio input per option sharing the same
+// name.
+func Radio(name string, options ...Option) *Field {
+	return &Field{Name: name, Type: RadioType, Options: options}
+}
+
 // Checkbox creates a checkbox field.
 func Checkbox(name string) *Field {
 	return &Field{Name: name, Type: CheckboxType}

@@ -359,11 +359,10 @@ func TestRenderer_FieldTypes(t *testing.T) {
 			})
 
 			t.Run("Radio", func(t *testing.T) {
-				f := Select("plan",
+				f := Radio("plan",
 					Option{Value: "free", Label: "Free"},
 					Option{Value: "pro", Label: "Pro"},
 				)
-				f.Type = RadioType
 				f.Value = "pro"
 
 				html, err := r.Field(f, th.opts)
@@ -428,9 +427,8 @@ func TestRenderer_FieldTypes(t *testing.T) {
 			})
 
 			t.Run("RadioRendersAsFieldsetWithLegendAndNoSeparateLabel", func(t *testing.T) {
-				f := Select("plan", Option{Value: "free", Label: "Free"}, Option{Value: "pro", Label: "Pro"}).
+				f := Radio("plan", Option{Value: "free", Label: "Free"}, Option{Value: "pro", Label: "Pro"}).
 					WithLabel("Choisissez un plan")
-				f.Type = RadioType
 
 				html, err := r.Row(f, th.opts)
 
@@ -472,8 +470,7 @@ func TestRenderer_FieldTypes(t *testing.T) {
 		assert.NoError(t, err)
 		assert.StringContains(t, string(html), `class="form-check-input"`)
 
-		radio := Select("plan", Option{Value: "free", Label: "Free"})
-		radio.Type = RadioType
+		radio := Radio("plan", Option{Value: "free", Label: "Free"})
 		html, err = r.Field(radio, render.Options{Name: "bootstrap5"})
 		assert.NoError(t, err)
 		assert.StringContains(t, string(html), `class="form-check-input"`)
