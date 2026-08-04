@@ -52,6 +52,25 @@ func TestFuncs_Form(t *testing.T) {
 	assert.StringContains(t, got, `name="username"`)
 }
 
+func TestFuncs_FormStart(t *testing.T) {
+	r := NewRenderer("default", ThemeDefault())
+	f := New("login").WithAction("/login")
+
+	got := renderTemplate(t, r, `{{ form_start . }}`, f)
+
+	assert.StringContains(t, got, `<form`)
+	assert.StringContains(t, got, `action="/login"`)
+}
+
+func TestFuncs_FormEnd(t *testing.T) {
+	r := NewRenderer("default", ThemeDefault())
+	f := New("login")
+
+	got := renderTemplate(t, r, `{{ form_end . }}`, f)
+
+	assert.Equal(t, "</form>", got)
+}
+
 func TestFuncs_FormRow(t *testing.T) {
 	r := NewRenderer("default", ThemeDefault())
 	f := Text("username").WithLabel("Nom d'utilisateur")

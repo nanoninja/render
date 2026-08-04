@@ -14,7 +14,9 @@
 # Output of the `go test -coverprofile` command
 *.cover
 
-# Directory for Go build artifacts
+# Directory for Go build artifacts, and local scratch programs
+# (shared, documented examples live in _example/ instead)
+cmd/
 bin/
 
 # Logs

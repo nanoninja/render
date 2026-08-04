@@ -2,9 +2,13 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Command formsdemo is a scratch net/http server demoing the forms
-// sub-package end to end: field rendering, theme switching, layout
-// groups, and redisplay after a failed submit via Form.Fill.
+// This example runs a net/http server demoing the forms sub-package
+// end to end: field rendering, theme switching, layout groups, and
+// redisplay after a failed submit via Form.Fill.
+//
+// Run it with:
+//
+//	go run ./_example/login
 package main
 
 import (

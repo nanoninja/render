@@ -15,7 +15,7 @@ All notable changes to this project will be documented in this file.
   - `Form.Fill` for redisplaying a form with submitted values and validation errors after a failed submit — binding and validation themselves are out of scope by design.
   - Accessibility: `aria-invalid`/`aria-describedby` on invalid fields, `<fieldset>`/`<legend>` for radio and checkbox groups.
 - `tmpl.DefaultFuncs()` gained a `dict` helper (build a `map[string]any` from alternating key/value arguments).
-- `cmd/formsdemo`: a runnable `net/http` example server demonstrating the `forms` package end to end.
+- `_example/login`: a runnable `net/http` example server demonstrating the `forms` package end to end.
 
 ### Changed
 - `README.md` documents the `forms` sub-package and corrects a stale `DefaultFuncs` list.

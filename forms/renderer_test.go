@@ -493,6 +493,14 @@ func TestRenderer_Render(t *testing.T) {
 		assert.StringContains(t, w.String(), `name="username"`)
 	})
 
+	t.Run("UnknownThemeReturnsError", func(t *testing.T) {
+		var w bytes.Buffer
+
+		err := r.Render(context.Background(), &w, Text("username"), render.Options{Name: "bogus"})
+
+		assert.Error(t, err)
+	})
+
 	t.Run("RendersForm", func(t *testing.T) {
 		var w bytes.Buffer
 		form := New("login").Add(Text("username"))
