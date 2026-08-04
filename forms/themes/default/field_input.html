@@ -1,0 +1,1 @@
+{{define "field_input"}}<input type="{{.HTMLType}}" name="{{.Name}}" id="{{.Name}}"{{with .Value}} value="{{.}}"{{end}}{{with .Placeholder}} placeholder="{{.}}"{{end}}{{if .Required}} required{{end}}{{if .Errors}} aria-invalid="true" aria-describedby="{{.Name}}-errors"{{end}}{{range $k, $v := .Attrs}} {{$k}}="{{$v}}"{{end}}>{{end}}

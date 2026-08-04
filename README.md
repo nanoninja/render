@@ -6,7 +6,6 @@ Zero allocations on the hot path — configuration is a plain value struct, not 
 [![Golang](https://img.shields.io/badge/Go-%3E%3D%201.24-%2300ADD8.svg)](https://go.dev/)
 [![Tests](https://github.com/nanoninja/render/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/nanoninja/render/actions/workflows/ci.yaml)
 [![codecov](https://codecov.io/gh/nanoninja/render/graph/badge.svg?token=FNR16B9429)](https://codecov.io/gh/nanoninja/render)
-[![Go Report Card](https://goreportcard.com/badge/github.com/nanoninja/render)](https://goreportcard.com/report/github.com/nanoninja/render)
 [![Go Reference](https://pkg.go.dev/badge/github.com/nanoninja/render.svg)](https://pkg.go.dev/github.com/nanoninja/render)
 [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
@@ -15,6 +14,7 @@ Zero allocations on the hot path — configuration is a plain value struct, not 
 - Built-in renderers: JSON, XML, CSV, Text, HTML, Binary, YAML, Markdown, Gzip
 - Composable renderers: Buffer, Cache, Multi, Pipe
 - Template rendering via the `tmpl` sub-package (`html/template` and `text/template`)
+- Form rendering via the `forms` sub-package — themable, Symfony-inspired field/form rendering on top of `tmpl`
 - Context support — cancellation checked on every render call; timeout supported by composable renderers (Buffer, Cache, Pipe, Multi)
 - Zero-allocation options — `Options` is a plain struct passed by value
 - Thread-safe by design — renderers hold no mutable state after construction
@@ -260,9 +260,53 @@ t.Render(ctx, w, data, render.Options{Name: "index.html"})
 ### Built-in template functions
 
 `WithDefaultFuncsHTML` / `WithDefaultFuncs` provide:
-`upper`, `lower`, `trim`, `truncate`, `replace`, `split`, `join`,
-`hasPrefix`, `hasSuffix`, `default`, `ternary`, `first`, `last`,
+`upper`, `lower`, `trim`, `replace`, `contains`, `hasPrefix`, `hasSuffix`,
+`split`, `join`, `truncate`, `default`, `ternary`, `first`, `last`, `dict`,
 `int`, `float`, `now`, `date`, `add`, `sub`, `mul`, `div`, `sum`, `avg`, `nl2br`
+
+## Forms
+
+The `forms` sub-package describes form fields in Go and renders them as HTML through a swappable theme — no HTML written by hand, no struct-tag reflection.
+
+```go
+import (
+    "github.com/nanoninja/render"
+    "github.com/nanoninja/render/forms"
+    "github.com/nanoninja/render/tmpl"
+)
+
+login := forms.New("login").
+    WithAction("/login").
+    Add(
+        forms.Text("username").WithLabel("Username").WithRequired(),
+        forms.Password("password").WithLabel("Password").WithRequired(),
+        forms.Submit("submit").WithLabel("Sign in"),
+    )
+
+r := forms.NewRenderer("default", forms.ThemeDefault())
+
+// The whole form as one HTML response (e.g. an HTMX partial swap) —
+// Renderer implements render.Renderer, so it composes with Buffer,
+// Cache, Gzip, and Multi like any other renderer.
+render.Buffer(r).Render(ctx, w, login, render.NoOptions)
+
+// Or embedded inside a larger page template:
+t := tmpl.HTML("myapp", tmpl.SetFuncsHTML(forms.Funcs(r)))
+// {{ form .Form }}
+```
+
+Two themes ship built in — `ThemeDefault` (dependency-free) and `ThemeBootstrap5` — selected per call via the existing `render.Options.Name` field, exactly like named templates in `tmpl`:
+
+```go
+r.RegisterTheme("bootstrap5", forms.ThemeBootstrap5())
+r.Render(ctx, w, login, render.Options{Name: "bootstrap5"})
+```
+
+Redisplaying a form with the user's own input and validation errors after a failed submit is a single call — binding and validation themselves are deliberately out of scope (see the package doc):
+
+```go
+login.Fill(req.PostForm, fieldErrs, formErrs...)
+```
 
 ## Context and Timeout
 

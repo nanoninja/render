@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.0] - 2026-08-04
+
+### Added
+- New `forms` sub-package: Symfony-inspired form field/form rendering on top of `render`/`tmpl`.
+  - `Field`/`Form` model with fluent `With*` builders; no struct-tag reflection.
+  - Built-in field types: text, email, password, date, number, tel, url, color, range, time, search, file, textarea, select (single/multiple), checkbox, checkbox group, radio, hidden, submit.
+  - Two themes, `default` (dependency-free) and `bootstrap5`, switchable per call via `render.Options.Name`; theme completeness validated at registration (`Renderer.RegisterTheme`).
+  - Rendering granularity: `Field`, `Label`, `Errors`, `Row`, `FormStart`/`FormEnd`, `Form`, `Group` (two-column/multi-step layouts), plus form-level `Form.Errors`/`FormErrors`.
+  - `Renderer` implements `render.Renderer`, composing with `render.Buffer`/`Cache`/`Gzip`/`Multi`.
+  - `Funcs(r)` exposes `form`, `form_start`, `form_end`, `form_row`, `form_label`, `form_widget`, `form_errors`, `form_global_errors`, `form_group` to `tmpl` templates.
+  - `Form.Fill` for redisplaying a form with submitted values and validation errors after a failed submit — binding and validation themselves are out of scope by design.
+  - Accessibility: `aria-invalid`/`aria-describedby` on invalid fields, `<fieldset>`/`<legend>` for radio and checkbox groups.
+- `tmpl.DefaultFuncs()` gained a `dict` helper (build a `map[string]any` from alternating key/value arguments).
+- `cmd/formsdemo`: a runnable `net/http` example server demonstrating the `forms` package end to end.
+
+### Changed
+- `README.md` documents the `forms` sub-package and corrects a stale `DefaultFuncs` list.
+
+### Removed
+- Go Report Card badge from `README.md` — the service is no longer maintained following the rise of `golangci-lint`.
+
 ## [0.1.0] - 2026-04-25
 
 ### Added

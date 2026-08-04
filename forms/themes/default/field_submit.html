@@ -1,0 +1,1 @@
+{{define "field_submit"}}<button type="submit" name="{{.Name}}"{{range $k, $v := .Attrs}} {{$k}}="{{$v}}"{{end}}>{{.Label}}</button>{{end}}

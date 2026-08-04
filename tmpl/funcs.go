@@ -112,6 +112,24 @@ func DefaultFuncs() template.FuncMap {
 			return slice[len(slice)-1]
 		},
 
+		// dict builds a map[string]any from alternating key/value
+		// arguments. Keys must be strings.
+		// Example: {{ dict "class" "email-input" "autofocus" true }}
+		"dict": func(pairs ...any) (map[string]any, error) {
+			if len(pairs)%2 != 0 {
+				return nil, errors.New("dict: odd number of arguments")
+			}
+			d := make(map[string]any, len(pairs)/2)
+			for i := 0; i < len(pairs); i += 2 {
+				key, ok := pairs[i].(string)
+				if !ok {
+					return nil, errors.New("dict: keys must be string")
+				}
+				d[key] = pairs[i+1]
+			}
+			return d, nil
+		},
+
 		// -------------------------
 		// Type conversion
 		// -------------------------

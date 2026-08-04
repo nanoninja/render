@@ -15,7 +15,6 @@
 *.cover
 
 # Directory for Go build artifacts
-cmd/
 bin/
 
 # Logs
@@ -36,3 +35,6 @@ Thumbs.db
 # Go workspace file
 go.work
 go.work.sum
+
+# Local AI-assisted working notes, not part of the project
+CLAUDE.md

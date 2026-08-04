@@ -1,0 +1,1 @@
+{{define "label"}}{{if and (not .IsSubmit) (not .IsGroup)}}{{with .Label}}<label for="{{$.Name}}">{{.}}{{if $.Required}} *{{end}}</label>{{end}}{{end}}{{end}}

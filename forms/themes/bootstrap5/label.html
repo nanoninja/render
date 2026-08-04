@@ -1,0 +1,1 @@
+{{define "label"}}{{if and (not .IsSubmit) (not .IsGroup)}}{{with .Label}}<label for="{{$.Name}}" class="form-label">{{.}}{{if $.Required}} <span class="text-danger">*</span>{{end}}</label>{{end}}{{end}}{{end}}

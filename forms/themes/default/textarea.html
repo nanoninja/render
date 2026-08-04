@@ -1,0 +1,1 @@
+{{define "field_textarea"}}<textarea name="{{.Name}}" id="{{.Name}}"{{if .Required}} required{{end}}{{if .Errors}} aria-invalid="true" aria-describedby="{{.Name}}-errors"{{end}}{{range $k, $v := .Attrs}} {{$k}}="{{$v}}"{{end}}>{{.Value}}</textarea>{{end}}
